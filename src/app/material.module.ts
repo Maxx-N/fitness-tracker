@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 const materialModules = [
   MatButtonModule,
@@ -15,6 +16,7 @@ const materialModules = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatCheckboxModule,
+  MatSidenavModule,
 ];
 
 @NgModule({
