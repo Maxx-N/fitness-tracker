@@ -2,6 +2,7 @@
   <form
     fxLayout="column"
     fxLayoutAlign="center center"
+    fxLayoutGap="10px"
     #f="ngForm"
     (ngSubmit)="onSubmit(f)"
   >
@@ -51,13 +52,16 @@
         ngModel
         name="birthdate"
         required
+        #birthDateInput="ngModel"
       />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="birthDateInput.hasError('required')">Field must not be empty</mat-error>
+      <mat-error *ngIf="birthDateInput.hasError('matDatepickerMax')">You must be at least 18</mat-error>
     </mat-form-field>
     <mat-checkbox ngModel name="agree" color="primary" required>
       Agree to Terms and Conditions
     </mat-checkbox>
-    <button type="submit" mat-raised-button color="primary">Submit</button>
+    <button type="submit" mat-raised-button color="primary" [disabled]="f.invalid">Submit</button>
   </form>
 </section>
