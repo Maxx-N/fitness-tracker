@@ -23,6 +23,10 @@ export class TrainingService {
     return { ...this.runningExercise };
   }
 
+  getPastExercises(): Exercise[] {
+    return [...this.pastExercises];
+  }
+
   startExercise(selectedId: string): void {
     this.runningExercise = this.availableExercises.find(
       (exercise: Exercise) => {
