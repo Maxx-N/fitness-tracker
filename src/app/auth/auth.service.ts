@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 
-import { AuthData } from './auth-data.model';
-import { User } from './user.model';
 import { TrainingService } from '../training/training.service';
+import { AuthData } from './auth-data.model';
 
 @Injectable()
 export class AuthService {
@@ -18,13 +17,24 @@ export class AuthService {
     private trainingService: TrainingService
   ) {}
 
+  initAuthListener(): void {
+    this.auth.authState.subscribe((user) => {
+      if (user) {
+        this.isAuthenticated = true;
+        this.authChange.next(true);
+        this.router.navigate(['training']);
+      } else {
+        this.trainingService.cancelSubscriptions();
+        this.isAuthenticated = false;
+        this.authChange.next(false);
+        this.router.navigate(['login']);
+      }
+    });
+  }
+
   registerUser(authData: AuthData): void {
     this.auth
       .createUserWithEmailAndPassword(authData.email, authData.password)
-      .then((result) => {
-        console.log(result);
-        this.authSuccessfully();
-      })
       .catch((error) => {
         console.log(error);
       });
@@ -33,29 +43,16 @@ export class AuthService {
   login(authData: AuthData): void {
     this.auth
       .signInWithEmailAndPassword(authData.email, authData.password)
-      .then((result) => {
-        this.authSuccessfully();
-      })
       .catch((error) => {
         console.log(error);
       });
   }
 
   logout(): void {
-    this.trainingService.cancelSubscriptions();
     this.auth.signOut();
-    this.isAuthenticated = false;
-    this.authChange.next(false);
-    this.router.navigate(['login']);
   }
 
   isAuth(): boolean {
     return this.isAuthenticated;
-  }
-
-  private authSuccessfully(): void {
-    this.isAuthenticated = true;
-    this.authChange.next(true);
-    this.router.navigate(['training']);
   }
 }
