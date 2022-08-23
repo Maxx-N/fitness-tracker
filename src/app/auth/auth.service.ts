@@ -38,6 +38,7 @@ export class AuthService {
   }
 
   logout(): void {
+    this.auth.signOut();
     this.isAuthenticated = false;
     this.authChange.next(false);
     this.router.navigate(['login']);
