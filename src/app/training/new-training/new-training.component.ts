@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { NgForm } from '@angular/forms';
+import { map, Observable } from 'rxjs';
 
 import { Exercise } from '../exercise.model';
 import { TrainingService } from '../training.service';
@@ -12,7 +12,7 @@ import { TrainingService } from '../training.service';
   styleUrls: ['./new-training.component.scss'],
 })
 export class NewTrainingComponent implements OnInit {
-  availableExercises: Observable<any[]>;
+  availableExercises: Observable<Exercise[]>;
   selectedExerciseId: string;
 
   constructor(
@@ -21,10 +21,24 @@ export class NewTrainingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.availableExercises = this.trainingService.getAvailableExercises();
     this.availableExercises = this.db
       .collection('availableExercises')
-      .valueChanges();
+      .snapshotChanges()
+      .pipe(
+        map((resultArray) => {
+          return resultArray.map((result) => {
+            return {
+              id: result.payload.doc.id,
+              ...(result.payload.doc.data() as {
+                name: string;
+                duration: number;
+                calories: number;
+              }),
+            };
+          });
+        })
+      );
+    this.availableExercises.subscribe((res) => console.log(res));
   }
 
   onStartTraining(form: NgForm) {
