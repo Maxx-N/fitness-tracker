@@ -8,9 +8,13 @@
         <mat-form-field appearance="fill">
           <mat-label>Choose your exercise</mat-label>
           <mat-select ngModel name="exerciseId" required>
-            <mat-option
-              *ngFor="let exercise of availableExercises"
+            <!-- <mat-option
+              *ngFor="let exercise of (availableExercises | async )"
               [value]="exercise.id"
+            > -->
+            <mat-option
+              *ngFor="let exercise of (availableExercises | async )"
+              [value]="exercise.name"
             >
               {{ exercise.name }}
             </mat-option>
