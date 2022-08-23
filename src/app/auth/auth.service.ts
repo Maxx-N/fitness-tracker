@@ -5,13 +5,18 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 import { AuthData } from './auth-data.model';
 import { User } from './user.model';
+import { TrainingService } from '../training/training.service';
 
 @Injectable()
 export class AuthService {
   authChange = new Subject<boolean>();
   private isAuthenticated: boolean = false;
 
-  constructor(private router: Router, private auth: AngularFireAuth) {}
+  constructor(
+    private router: Router,
+    private auth: AngularFireAuth,
+    private trainingService: TrainingService
+  ) {}
 
   registerUser(authData: AuthData): void {
     this.auth
@@ -29,7 +34,6 @@ export class AuthService {
     this.auth
       .signInWithEmailAndPassword(authData.email, authData.password)
       .then((result) => {
-        console.log(result);
         this.authSuccessfully();
       })
       .catch((error) => {
@@ -38,6 +42,7 @@ export class AuthService {
   }
 
   logout(): void {
+    this.trainingService.cancelSubscriptions();
     this.auth.signOut();
     this.isAuthenticated = false;
     this.authChange.next(false);
