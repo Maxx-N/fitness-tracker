@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { map, Observable, Subject } from 'rxjs';
+import { map, Subject } from 'rxjs';
 
 import { Exercise } from './exercise.model';
 
 @Injectable()
 export class TrainingService {
-  private availableExercises: Exercise[];
-  private runningExercise: Exercise;
-  exerciseChanged = new Subject<Exercise>();
+  runningExerciseChanged = new Subject<Exercise>();
   availableExercisesChanged = new Subject<Exercise[]>();
-  private pastExercises: Exercise[] = [];
+  pastExercisesChanged = new Subject<Exercise[]>();
+  private runningExercise: Exercise;
+  private availableExercises: Exercise[];
 
   constructor(private db: AngularFirestore) {}
 
@@ -38,12 +38,27 @@ export class TrainingService {
       });
   }
 
-  getRunningExercise(): Exercise {
-    return { ...this.runningExercise };
+  fetchPastExercises(): void {
+    this.db
+      .collection('finishedExercises')
+      .valueChanges()
+      .pipe(
+        map((exercises: any[]) => {
+          return exercises.map((exercise) => {
+            return {
+              ...exercise,
+              date: new Date(exercise.date),
+            };
+          });
+        })
+      )
+      .subscribe((exercises: Exercise[]) => {
+        this.pastExercisesChanged.next(exercises);
+      });
   }
 
-  getPastExercises(): Exercise[] {
-    return [...this.pastExercises];
+  getRunningExercise(): Exercise {
+    return { ...this.runningExercise };
   }
 
   startExercise(selectedId: string): void {
@@ -52,7 +67,7 @@ export class TrainingService {
         return exercise.id === selectedId;
       }
     );
-    this.exerciseChanged.next({ ...this.runningExercise });
+    this.runningExerciseChanged.next({ ...this.runningExercise });
   }
 
   completeExercice(): void {
@@ -62,7 +77,7 @@ export class TrainingService {
       state: 'completed',
     });
     this.runningExercise = null;
-    this.exerciseChanged.next(null);
+    this.runningExerciseChanged.next(null);
   }
 
   cancelExercice(progress: number): void {
@@ -74,10 +89,12 @@ export class TrainingService {
       state: 'cancelled',
     });
     this.runningExercise = null;
-    this.exerciseChanged.next(null);
+    this.runningExerciseChanged.next(null);
   }
 
   private addDataToDatabase(exercise: Exercise) {
-    this.db.collection<Exercise>('finishedExercises').add(exercise);
+    this.db
+      .collection('finishedExercises')
+      .add({ ...exercise, date: exercise.date.toISOString() });
   }
 }
