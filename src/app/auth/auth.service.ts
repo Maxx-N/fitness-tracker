@@ -9,15 +9,11 @@ import { User } from './user.model';
 @Injectable()
 export class AuthService {
   authChange = new Subject<boolean>();
-  private user: User;
+  private isAuthenticated: boolean = false;
 
   constructor(private router: Router, private auth: AngularFireAuth) {}
 
   registerUser(authData: AuthData): void {
-    // this.user = {
-    //   email: authData.email,
-    //   userId: Math.round(Math.random() * 10000).toString(),
-    // };
     this.auth
       .createUserWithEmailAndPassword(authData.email, authData.password)
       .then((result) => {
@@ -30,10 +26,6 @@ export class AuthService {
   }
 
   login(authData: AuthData): void {
-    // this.user = {
-    //   email: authData.email,
-    //   userId: Math.round(Math.random() * 10000).toString(),
-    // };
     this.auth
       .signInWithEmailAndPassword(authData.email, authData.password)
       .then((result) => {
@@ -46,20 +38,17 @@ export class AuthService {
   }
 
   logout(): void {
-    this.user = null;
+    this.isAuthenticated = false;
     this.authChange.next(false);
     this.router.navigate(['login']);
   }
 
-  getUser(): User {
-    return { ...this.user };
-  }
-
   isAuth(): boolean {
-    return !!this.user;
+    return this.isAuthenticated;
   }
 
   private authSuccessfully(): void {
+    this.isAuthenticated = true;
     this.authChange.next(true);
     this.router.navigate(['training']);
   }
