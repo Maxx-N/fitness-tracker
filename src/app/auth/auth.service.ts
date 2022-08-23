@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
+import { UiService } from '../shared/ui.service';
 import { TrainingService } from '../training/training.service';
 import { AuthData } from './auth-data.model';
 
@@ -16,7 +17,8 @@ export class AuthService {
     private router: Router,
     private auth: AngularFireAuth,
     private trainingService: TrainingService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private uiService: UiService
   ) {}
 
   initAuthListener(): void {
@@ -35,9 +37,14 @@ export class AuthService {
   }
 
   registerUser(authData: AuthData): void {
+    this.uiService.loadingStateChanged.next(true);
     this.auth
       .createUserWithEmailAndPassword(authData.email, authData.password)
+      .then(() => {
+        this.uiService.loadingStateChanged.next(false);
+      })
       .catch((error) => {
+        this.uiService.loadingStateChanged.next(false);
         this.snackBar.open(error.message, null, {
           duration: 3000,
         });
@@ -45,9 +52,14 @@ export class AuthService {
   }
 
   login(authData: AuthData): void {
+    this.uiService.loadingStateChanged.next(true);
     this.auth
       .signInWithEmailAndPassword(authData.email, authData.password)
+      .then(() => {
+        this.uiService.loadingStateChanged.next(false);
+      })
       .catch((error) => {
+        this.uiService.loadingStateChanged.next(false);
         this.snackBar.open(error.message, null, {
           duration: 3000,
         });
