@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
 
-import * as fromApp from 'src/app/app.reducer';
+import * as fromRoot from 'src/app/app.reducer';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -17,15 +17,11 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private store: Store<{ ui: fromApp.State }>
+    private store: Store<fromRoot.State>
   ) {}
 
   ngOnInit(): void {
-    this.isLoading$ = this.store.pipe(
-      map((state) => {
-        return state.ui.isLoading;
-      })
-    );
+    this.isLoading$ = this.store.select(fromRoot.getIsLoading);
 
     this.loginForm = new FormGroup({
       email: new FormControl('', {
