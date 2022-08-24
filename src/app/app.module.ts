@@ -26,11 +26,11 @@ import { WelcomeComponent } from './welcome/welcome.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
     MaterialModule,
     FlexLayoutModule,
     AngularFireModule.initializeApp(environment.firebase),
     AuthModule,
+    AppRoutingModule,
   ],
   providers: [AuthService, TrainingService, UiService],
   bootstrap: [AppComponent],

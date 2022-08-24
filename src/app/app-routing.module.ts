@@ -11,7 +11,9 @@ const routes: Routes = [
     loadChildren: () =>
       import('src/app/training/training.module').then((m) => m.TrainingModule),
   },
-  // { path: '**', redirectTo: '' },
+  // Not usefull here because the method initAuthListener of the AuthService redirect to login or training.
+  // NB: For this to work, the AppRoutingModule has to be the last imported one in the AppModule!
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
