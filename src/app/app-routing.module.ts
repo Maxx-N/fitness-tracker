@@ -10,8 +10,9 @@ const routes: Routes = [
     path: 'training',
     loadChildren: () =>
       import('src/app/training/training.module').then((m) => m.TrainingModule),
+    canLoad: [AuthGuard],
   },
-  // Not usefull here because the method initAuthListener of the AuthService redirect to login or training.
+  // Not usefull here because the method initAuthListener of the AuthService redirects to login or training.
   // NB: For this to work, the AppRoutingModule has to be the last imported one in the AppModule!
   { path: '**', redirectTo: '' },
 ];
