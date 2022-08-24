@@ -13,7 +13,6 @@ import { MaterialModule } from './material.module';
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 import { UiService } from './shared/ui.service';
-import { TrainingModule } from './training/training.module';
 import { TrainingService } from './training/training.service';
 import { WelcomeComponent } from './welcome/welcome.component';
 
@@ -32,7 +31,6 @@ import { WelcomeComponent } from './welcome/welcome.component';
     FlexLayoutModule,
     AngularFireModule.initializeApp(environment.firebase),
     AuthModule,
-    TrainingModule,
   ],
   providers: [AuthService, TrainingService, UiService],
   bootstrap: [AppComponent],
