@@ -4,6 +4,7 @@ import { map, Subject, Subscription } from 'rxjs';
 
 import { UiService } from '../shared/ui.service';
 import { Exercise } from './exercise.model';
+import * as subHelpers from 'src/app/shared/subscription.helpers';
 
 @Injectable()
 export class TrainingService {
@@ -112,9 +113,7 @@ export class TrainingService {
   }
 
   cancelSubscriptions(): void {
-    this.firebaseSubscriptions.forEach((subscription: Subscription) => {
-      subscription.unsubscribe();
-    });
+    subHelpers.unsubscribeIfExist(...this.firebaseSubscriptions);
   }
 
   private addDataToDatabase(exercise: Exercise) {

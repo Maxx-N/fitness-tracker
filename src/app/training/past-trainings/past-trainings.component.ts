@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 
 import { Exercise } from '../exercise.model';
 import { TrainingService } from '../training.service';
+import * as subHelpers from 'src/app/shared/subscription.helpers';
 
 @Component({
   selector: 'app-past-trainings',
@@ -52,7 +53,7 @@ export class PastTrainingsComponent
   }
 
   ngOnDestroy(): void {
-    this.pastExercisesSubscription.unsubscribe();
+    subHelpers.unsubscribeIfExist(this.pastExercisesSubscription);
   }
 
   applyFilter(event: Event): void {

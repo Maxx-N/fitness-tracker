@@ -8,6 +8,7 @@ import {
 import { Subscription } from 'rxjs';
 
 import { AuthService } from 'src/app/auth/auth.service';
+import * as subHelpers from 'src/app/shared/subscription.helpers';
 
 @Component({
   selector: 'app-sidenav-list',
@@ -30,7 +31,7 @@ export class SidenavListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.authsubscription.unsubscribe();
+    subHelpers.unsubscribeIfExist(this.authsubscription);
   }
 
   onCloseSidenav() {

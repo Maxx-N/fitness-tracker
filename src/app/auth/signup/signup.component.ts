@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 
 import { UiService } from 'src/app/shared/ui.service';
 import { AuthService } from '../auth.service';
+import * as subHelpers from 'src/app/shared/subscription.helpers';
 
 @Component({
   selector: 'app-signup',
@@ -28,7 +29,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.loadingSubsciption.unsubscribe();
+    subHelpers.unsubscribeIfExist(this.loadingSubsciption);
   }
 
   onSubmit(form: NgForm) {

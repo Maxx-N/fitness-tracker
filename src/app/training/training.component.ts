@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { Exercise } from './exercise.model';
 import { TrainingService } from './training.service';
+import * as subHelpers from 'src/app/shared/subscription.helpers';
 
 @Component({
   selector: 'app-training',
@@ -16,18 +17,19 @@ export class TrainingComponent implements OnInit, OnDestroy {
   constructor(private trainingService: TrainingService) {}
 
   ngOnInit(): void {
-    this.exerciseSubscription = this.trainingService.runningExerciseChanged.subscribe(
-      (exercise: Exercise) => {
-        if (!!exercise) {
-          this.ongoingTraining = true;
-        } else {
-          this.ongoingTraining = false;
+    this.exerciseSubscription =
+      this.trainingService.runningExerciseChanged.subscribe(
+        (exercise: Exercise) => {
+          if (!!exercise) {
+            this.ongoingTraining = true;
+          } else {
+            this.ongoingTraining = false;
+          }
         }
-      }
-    );
+      );
   }
 
   ngOnDestroy(): void {
-    this.exerciseSubscription.unsubscribe();
+    subHelpers.unsubscribeIfExist(this.exerciseSubscription);
   }
 }

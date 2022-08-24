@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { UiService } from 'src/app/shared/ui.service';
 import { Exercise } from '../exercise.model';
 import { TrainingService } from '../training.service';
+import * as subHelpers from 'src/app/shared/subscription.helpers';
 
 @Component({
   selector: 'app-new-training',
@@ -37,10 +38,9 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    [this.availableExercisesSubscription, this.loadingSubscription].forEach(
-      (sub) => {
-        sub.unsubscribe();
-      }
+    subHelpers.unsubscribeIfExist(
+      this.availableExercisesSubscription,
+      this.loadingSubscription
     );
   }
 
@@ -50,7 +50,7 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFetchExercises() : void {
+  onFetchExercises(): void {
     this.trainingService.fetchAvailableExercises();
   }
 }
