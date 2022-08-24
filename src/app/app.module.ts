@@ -13,7 +13,7 @@ import { AuthService } from './auth/auth.service';
 import { MaterialModule } from './material.module';
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
-import { UiService } from './shared/ui.service';
+import { UIService } from './shared/ui.service';
 import { TrainingService } from './training/training.service';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { appReducer } from 'src/app/app.reducer';
@@ -35,7 +35,7 @@ import { appReducer } from 'src/app/app.reducer';
     AuthModule,
     AppRoutingModule,
   ],
-  providers: [AuthService, TrainingService, UiService],
+  providers: [AuthService, TrainingService, UIService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
