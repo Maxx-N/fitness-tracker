@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { UIService } from '../shared/ui.service';
+import { UiService } from '../shared/ui.service';
 import { TrainingService } from '../training/training.service';
 import { AuthData } from './auth-data.model';
 import * as fromApp from 'src/app/app.reducer';
@@ -18,7 +18,7 @@ export class AuthService {
     private router: Router,
     private auth: AngularFireAuth,
     private trainingService: TrainingService,
-    private uiService: UIService,
+    private uiService: UiService,
     private store: Store<{ ui: fromApp.State }>
   ) {}
 

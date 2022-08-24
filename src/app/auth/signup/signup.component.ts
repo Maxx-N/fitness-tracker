@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { UIService } from 'src/app/shared/ui.service';
+import { UiService } from 'src/app/shared/ui.service';
 import { AuthService } from '../auth.service';
 import * as subHelpers from 'src/app/shared/subscription.helpers';
 
@@ -16,7 +16,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   isLoading = false;
   private loadingSubsciption: Subscription;
 
-  constructor(private authService: AuthService, private uiService: UIService) {}
+  constructor(private authService: AuthService, private uiService: UiService) {}
 
   ngOnInit(): void {
     this.loadingSubsciption = this.uiService.loadingStateChanged.subscribe(

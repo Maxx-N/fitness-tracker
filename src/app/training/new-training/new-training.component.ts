@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { UIService } from 'src/app/shared/ui.service';
+import { UiService } from 'src/app/shared/ui.service';
 import { Exercise } from '../exercise.model';
 import { TrainingService } from '../training.service';
 import * as subHelpers from 'src/app/shared/subscription.helpers';
@@ -21,7 +21,7 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
 
   constructor(
     private trainingService: TrainingService,
-    private uiService: UIService
+    private uiService: UiService
   ) {}
 
   ngOnInit(): void {

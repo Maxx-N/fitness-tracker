@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable()
-export class UIService {
+export class UiService {
   loadingStateChanged = new Subject<boolean>();
 
   constructor(private snackbar: MatSnackBar) {}
