@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { map, Subject, Subscription, take } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { map, Subscription, take } from 'rxjs';
 
-import { UiService } from '../shared/ui.service';
-import { Exercise } from './exercise.model';
 import * as subHelpers from 'src/app/shared/subscription.helpers';
 import * as UI from 'src/app/shared/ui.actions';
-import * as fromTraining from 'src/app/training/training.reducer';
 import * as Training from 'src/app/training/training.actions';
+import * as fromTraining from 'src/app/training/training.reducer';
+import { UiService } from '../shared/ui.service';
+import { Exercise } from './exercise.model';
 
 @Injectable()
 export class TrainingService {
   private firebaseSubscriptions: Subscription[] = [];
-  pastExercisesChanged = new Subject<Exercise[]>();
 
   constructor(
     private db: AngularFirestore,
@@ -75,7 +74,7 @@ export class TrainingService {
           })
         )
         .subscribe((exercises: Exercise[]) => {
-          this.pastExercisesChanged.next(exercises);
+          this.store.dispatch(new Training.SetFinishedExercises(exercises));
         })
     );
   }

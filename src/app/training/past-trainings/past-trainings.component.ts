@@ -1,27 +1,19 @@
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
 
+import * as fromTraining from 'src/app/training/training.reducer';
 import { Exercise } from '../exercise.model';
 import { TrainingService } from '../training.service';
-import * as subHelpers from 'src/app/shared/subscription.helpers';
 
 @Component({
   selector: 'app-past-trainings',
   templateUrl: './past-trainings.component.html',
   styleUrls: ['./past-trainings.component.scss'],
 })
-export class PastTrainingsComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
+export class PastTrainingsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'date',
     'name',
@@ -32,28 +24,24 @@ export class PastTrainingsComponent
   dataSource = new MatTableDataSource<Exercise>();
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  private pastExercisesSubscription: Subscription;
 
-  constructor(private trainingService: TrainingService) {}
+  constructor(
+    private trainingService: TrainingService,
+    private store: Store<fromTraining.State>
+  ) {}
 
   ngOnInit(): void {
-    this.pastExercisesSubscription =
-      this.trainingService.pastExercisesChanged.subscribe(
-        (exercises: Exercise[]) => {
-          this.dataSource.data = exercises;
-        }
-      );
-
+    this.store
+      .select(fromTraining.getFinishedExercises)
+      .subscribe((exercices) => {
+        this.dataSource.data = exercices;
+      });
     this.trainingService.fetchPastExercises();
   }
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-  }
-
-  ngOnDestroy(): void {
-    subHelpers.unsubscribeIfExist(this.pastExercisesSubscription);
   }
 
   applyFilter(event: Event): void {
