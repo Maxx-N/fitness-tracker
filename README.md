@@ -1,6 +1,12 @@
 # FitnessTracker
 
+This application is a tool to accompany the practice of physical exercises. Start an exercise, do it for the time indicated or stop when you want. The application will show you the number of calories burned according to the time worked and will allow you to track your efforts! 
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.3.
+
+## HOW TO ACCESS THE DEPLOYED APP?
+
+Click [here](https://ng-fitness-tracker-3b170.web.app/) to see the deployed application.
 
 ## Development server
 
